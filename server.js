@@ -30,6 +30,7 @@ app.get('/videos', (req, res) => {
 
 // Serve video files statically
 app.use('/videos', express.static(videoDir));
+app.use('/video', express.static(path.join(__dirname, 'video')));
 
 // Start the server
 app.listen(PORT, () => {

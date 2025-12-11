@@ -3,6 +3,10 @@
     const videoCount = 15; // Number of videos
     let allVideos = []; // List of video filenames
 
+    <div id="videoContainer"></div>
+
+    
+
     // Fetch video list
     async function fetchVideoList() {
         const response = await fetch('/videos');
