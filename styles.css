@@ -1,0 +1,59 @@
+/* General body styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden; /* Prevent scrolling */
+}
+
+/* Main container for the video gallery */
+#videoGallery {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 videos per row */
+  grid-template-rows: repeat(3, 1fr); /* 3 rows in total */
+  gap: 10px; /* Spacing between videos */
+  width: 90vw; /* 90% of the viewport width */
+  height: 90vh; /* 90% of the viewport height */
+  box-sizing: border-box;
+}
+
+/* Individual video container */
+.video-container {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden; /* Prevent videos from overflowing their containers */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Video elements */
+video {
+  width: 100%; /* Fill the container width */
+  height: 100%; /* Fill the container height */
+  object-fit: cover; /* Maintain aspect ratio while filling the container */
+}
+
+/* VLC button styling */
+button {
+  display: inline-block;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

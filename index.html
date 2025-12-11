@@ -1,0 +1,69 @@
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=">
+<script>
+    const videoCount = 15; // Number of videos
+    let allVideos = []; // List of video filenames
+
+    // Fetch video list
+    async function fetchVideoList() {
+        const response = await fetch('/videos');
+        if (!response.ok) throw new Error('Failed to fetch video list');
+        allVideos = await response.json();
+    }
+
+    // Create a video element with a VLC button
+    function createVideoElement(videoSrc) {
+        const container = document.createElement('div');
+        container.className = 'video-container';
+
+        const videoElement = document.createElement('video');
+        videoElement.controls = true;
+        videoElement.volume = 0;
+        videoElement.src = `/videos/${videoSrc}`;
+        videoElement.addEventListener('ended', () => {
+            const newVideo = getRandomVideo();
+            videoElement.src = `/videos/${newVideo}`;
+            videoElement.play();
+        });
+
+        const vlcButton = document.createElement('button');
+        vlcButton.textContent = 'Open in VLC';
+        vlcButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const videoURL = videoElement.src;
+            const userConfirmed = confirm(
+                `To play this video in VLC, copy the URL below and paste it in VLC's "Open Network Stream" option:\n\n${videoURL}`
+            );
+            if (userConfirmed) {
+                navigator.clipboard.writeText(videoURL).then(() => {
+alert('Video URL copied to clipboard!');
+});
+}
+
+        container.appendChild(videoElement);
+        container.appendChild(vlcButton);
+        return container;
+    }
+
+    // Load videos into the gallery
+    async function loadVideoGallery() {
+        await fetchVideoList();
+        const videoGallery = document.getElementById('videoGallery');
+        const usedVideos = [];
+
+        for (let i = 0; i < videoCount; i++) {
+            const randomVideo = getRandomVideo(usedVideos);
+            usedVideos.push(randomVideo);
+            const videoElement = createVideoElement(randomVideo);
+            videoGallery.appendChild(videoElement);
+        }
+
+        // Resize the videos after they're added
+        resizeVideos();
+    }
+
+    // Load videos on page load
+    loadVideoGallery();
+
+    // Recalculate sizes on window resize
+    window.addEventListener('resize', resizeVideos);
+</script>
