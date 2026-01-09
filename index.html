@@ -1,3 +1,4 @@
+
 <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=">
 <script>
     const videoCount = 15; // Number of videos
@@ -36,7 +37,7 @@
             const videoURL = videoElement.src;
             const userConfirmed = confirm(
                 `To play this video in VLC, copy the URL below and paste it in VLC's "Open Network Stream" option:\n\n${videoURL}`
-            );
+            )});
             if (userConfirmed) {
                 navigator.clipboard.writeText(videoURL).then(() => {
 alert('Video URL copied to clipboard!');
