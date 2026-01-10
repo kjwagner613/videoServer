@@ -1,22 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Video Server</title>
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div id="videoGallery"></div>
+    <script>
+      const videoCount = 4; // Number of videos
+      let allVideos = []; // List of video filenames
 
-<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=">
-<script>
-    const videoCount = 15; // Number of videos
-    let allVideos = []; // List of video filenames
+      function getRandomVideo(usedVideos = []) {
+        if (!allVideos.length) return null;
+        const available = allVideos.filter((video) => !usedVideos.includes(video));
+        const pool = available.length ? available : allVideos;
+        return pool[Math.floor(Math.random() * pool.length)];
+      }
 
-    <div id="videoContainer"></div>
+      function resizeVideos() {
+        const videoGallery = document.getElementById('videoGallery');
+        if (!videoGallery) return;
+        const count = videoGallery.children.length || videoCount;
+        const columns = Math.ceil(Math.sqrt(count));
+        const rows = Math.ceil(count / columns);
+        const galleryWidth = videoGallery.clientWidth || window.innerWidth;
+        const cellWidth = galleryWidth / columns;
+        const cellHeight = Math.floor(cellWidth * 9 / 16);
+        videoGallery.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
+        videoGallery.style.gridTemplateRows = `repeat(${rows}, ${cellHeight}px)`;
+      }
 
-    
-
-    // Fetch video list
-    async function fetchVideoList() {
+      // Fetch video list
+      async function fetchVideoList() {
         const response = await fetch('/videos');
         if (!response.ok) throw new Error('Failed to fetch video list');
         allVideos = await response.json();
-    }
+      }
 
-    // Create a video element with a VLC button
-    function createVideoElement(videoSrc) {
+      // Create a video element with a next button
+      function createVideoElement(videoSrc) {
         const container = document.createElement('div');
         container.className = 'video-container';
 
@@ -25,50 +49,50 @@
         videoElement.volume = 0;
         videoElement.src = `/videos/${videoSrc}`;
         videoElement.addEventListener('ended', () => {
-            const newVideo = getRandomVideo();
-            videoElement.src = `/videos/${newVideo}`;
-            videoElement.play();
+          const newVideo = getRandomVideo();
+          if (!newVideo) return;
+          videoElement.src = `/videos/${newVideo}`;
+          videoElement.play();
         });
 
-        const vlcButton = document.createElement('button');
-        vlcButton.textContent = 'Open in VLC';
-        vlcButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            const videoURL = videoElement.src;
-            const userConfirmed = confirm(
-                `To play this video in VLC, copy the URL below and paste it in VLC's "Open Network Stream" option:\n\n${videoURL}`
-            )});
-            if (userConfirmed) {
-                navigator.clipboard.writeText(videoURL).then(() => {
-alert('Video URL copied to clipboard!');
-});
-}
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Next Video';
+        nextButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          const newVideo = getRandomVideo();
+          if (!newVideo) return;
+          videoElement.src = `/videos/${newVideo}`;
+          videoElement.play();
+        });
 
         container.appendChild(videoElement);
-        container.appendChild(vlcButton);
+        container.appendChild(nextButton);
         return container;
-    }
+      }
 
-    // Load videos into the gallery
-    async function loadVideoGallery() {
+      // Load videos into the gallery
+      async function loadVideoGallery() {
         await fetchVideoList();
         const videoGallery = document.getElementById('videoGallery');
         const usedVideos = [];
 
         for (let i = 0; i < videoCount; i++) {
-            const randomVideo = getRandomVideo(usedVideos);
-            usedVideos.push(randomVideo);
-            const videoElement = createVideoElement(randomVideo);
-            videoGallery.appendChild(videoElement);
+          const randomVideo = getRandomVideo(usedVideos);
+          if (!randomVideo) break;
+          usedVideos.push(randomVideo);
+          const videoElement = createVideoElement(randomVideo);
+          videoGallery.appendChild(videoElement);
         }
 
         // Resize the videos after they're added
         resizeVideos();
-    }
+      }
 
-    // Load videos on page load
-    loadVideoGallery();
+      // Load videos on page load
+      loadVideoGallery();
 
-    // Recalculate sizes on window resize
-    window.addEventListener('resize', resizeVideos);
-</script>
+      // Recalculate sizes on window resize
+      window.addEventListener('resize', resizeVideos);
+    </script>
+  </body>
+</html>
