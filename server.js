@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 5000;
+const PORT = 5100;
 
 // const videoDir = "/mnt/e/phoenixFiles/45645645456";
 // const videoDir = "/mnt/i/a";
@@ -13,11 +13,12 @@ const PORT = 5000;
 // const videoDir = "/mnt/j/phoenixFiles/X/AA";
 // const videoDir = "/mnt/j/phoenixFiles/X/X";
 // const videoDir = "/mnt/j/phoenixFiles/x/f";
-const videoDir = "/mnt/j/phoenixFiles/x/aa";
+// const videoDir = "/mnt/j/phoenixFiles/x/aa";
 // const videoDir = "/mnt/j/phoenixFiles/x/e";
-// const videoDir = "/mnt/j/phoenixFiles/x/d";
+const videoDir = "/mnt/j/phoenixFiles/x/f";
 
 
+// const videoDir = "/mnt/c/Users/kjwagner613/Downloads";
 
 app.use(express.static(__dirname));
 
