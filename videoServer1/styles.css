@@ -1,0 +1,80 @@
+h1 {
+
+position: absolute;
+top: 10px;
+left: 50%;
+
+}
+
+/* General body styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #0e0d0d;
+  color: #333;
+  margin: 0;
+  padding: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  /* Prevent scrolling */
+}
+
+/* Main container for the video gallery */
+#videoGallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(200px, 1fr));
+  grid-template-rows: repeat(2, 1fr);
+  margin-top: 5%;
+  /* 2 rows in total */
+  gap: 2px;
+  /* Spacing between videos */
+  width: 100vw;
+  /* 90% of the viewport width */
+  height: 100vh;
+  /* 90% of the viewport height */
+  box-sizing: border-box;
+}
+
+/* Individual video container */
+.video-container {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  /* Prevent videos from overflowing their containers */
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Video elements */
+video {
+  width: 100%;
+  /* Fill the container width */
+  height: 100%;
+  /* Fill the container height */
+  object-fit: cover;
+  /* Maintain aspect ratio while filling the container */
+}
+
+/* Next video button styling */
+button {
+  position: absolute;
+  right: 80%;
+  bottom: 8px;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: white;
+  background-color: #546679;
+  border: 1px solid rgb(57, 96, 114);
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+button:hover {
+  background-color: #0056b3;
+  opacity: 1;
+}

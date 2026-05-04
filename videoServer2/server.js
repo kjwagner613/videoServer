@@ -6,8 +6,8 @@ const app = express();
 const PORT = 5200;
 
 
-const videoDir = "/mnt/c/tools/videos";
-// const videoDir = "/mnt/e/phoenixFiles/sorted";
+// const videoDir = "/mnt/c/tools/videos";
+const videoDir = "/mnt/share/altnvr";
 const videoCount = 6; // Number of videos
 let allVideos = []; // List of video filenames
 
