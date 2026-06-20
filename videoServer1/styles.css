@@ -24,8 +24,8 @@ body {
 /* Main container for the video gallery */
 #videoGallery {
   display: grid;
-  grid-template-columns: repeat(2, minmax(200px, 1fr));
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   margin-top: 5%;
   /* 2 rows in total */
   gap: 2px;

@@ -13,21 +13,35 @@ function resizeVideos() {
   const videoGallery = document.getElementById('videoGallery');
   if (!videoGallery) return;
 
-  const count = videoGallery.children.length || videoCount;
-  const columns = Math.ceil(Math.sqrt(count));
-  const rows = Math.ceil(count / columns);
-  const galleryWidth = videoGallery.clientWidth || window.innerWidth;
-  const cellWidth = galleryWidth / columns;
-  const cellHeight = Math.floor((cellWidth * 9) / 16);
-
-  videoGallery.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
-  videoGallery.style.gridTemplateRows = `repeat(${rows}, ${cellHeight}px)`;
+  videoGallery.style.gridTemplateColumns = 'repeat(2, minmax(0, 1fr))';
+  videoGallery.style.gridTemplateRows = 'repeat(2, minmax(0, 1fr))';
 }
 
 async function fetchVideoList() {
-  const response = await fetch('/videos');
+  const response = await fetch('/videos/');
   if (!response.ok) throw new Error('Failed to fetch video list');
-  allVideos = await response.json();
+
+  const contentType = response.headers.get('content-type') || '';
+
+  // Express returns JSON; http-server returns an HTML directory listing.
+  if (contentType.includes('application/json')) {
+    const filenames = await response.json();
+    allVideos = filenames.map(
+      (filename) => `/videos/${encodeURIComponent(filename)}`,
+    );
+    return;
+  }
+
+  const directoryPage = await response.text();
+  const document = new DOMParser().parseFromString(directoryPage, 'text/html');
+  allVideos = [...document.querySelectorAll('a[href]')]
+    .map((link) => new URL(link.getAttribute('href'), response.url))
+    .filter((url) => url.pathname.toLowerCase().endsWith('.mp4'))
+    .map((url) => url.pathname);
+
+  if (!allVideos.length) {
+    throw new Error('No MP4 files found in /videos/');
+  }
 }
 
 function createVideoElement(videoSrc) {
@@ -36,12 +50,14 @@ function createVideoElement(videoSrc) {
 
   const videoElement = document.createElement('video');
   videoElement.controls = true;
-  videoElement.volume = 0;
-  videoElement.src = `/videos/${videoSrc}`;
+  videoElement.autoplay = true;
+  videoElement.muted = true;
+  videoElement.playsInline = true;
+  videoElement.src = videoSrc;
   videoElement.addEventListener('ended', () => {
     const newVideo = getRandomVideo();
     if (!newVideo) return;
-    videoElement.src = `/videos/${newVideo}`;
+    videoElement.src = newVideo;
     void videoElement.play();
   });
 
@@ -52,7 +68,7 @@ function createVideoElement(videoSrc) {
     event.preventDefault();
     const newVideo = getRandomVideo();
     if (!newVideo) return;
-    videoElement.src = `/videos/${newVideo}`;
+    videoElement.src = newVideo;
     void videoElement.play();
   });
 

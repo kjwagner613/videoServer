@@ -6,7 +6,8 @@ const app = express();
 const PORT = 5000;
 
 // const videoDir = "/mnt/c/tools/videos";
-const videoDir = "/mnt/share/newvids";
+// const videoDir = "/mnt/share/newvids";
+const videoDir = "C:/Users/kevin/videos";
 const videoCount = 4; // Number of videos
 let allVideos = []; // List of video filenames
 
